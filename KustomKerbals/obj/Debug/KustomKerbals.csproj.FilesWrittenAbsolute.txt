@@ -1,0 +1,12 @@
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/obj/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.cs
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/KustomKerbals.dll.mdb
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/KustomKerbals.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/obj/Debug/KustomKerbals.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/obj/Debug/KustomKerbals.dll.mdb
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/Assembly-CSharp.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/UnityEngine.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/Assembly-CSharp-firstpass.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/System.Xml.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/TDx.TDxInput.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/TrackIRUnity.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/Mono.Cecil.dll
