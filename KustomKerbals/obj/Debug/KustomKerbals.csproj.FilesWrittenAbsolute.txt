@@ -1,0 +1,7 @@
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/KustomKerbals.dll.mdb
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/KustomKerbals.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/obj/Debug/KustomKerbals.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/obj/Debug/KustomKerbals.dll.mdb
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/Assembly-CSharp.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/UnityEngine.dll
