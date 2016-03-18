@@ -35,6 +35,9 @@
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\Desktop 4\KSP_osx-3\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\..\Documents\All KSP\KSP_osx\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

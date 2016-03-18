@@ -5,3 +5,4 @@
 /Users/Clifton/Projects/KustomKerbals/KustomKerbals/obj/Debug/KustomKerbals.dll.mdb
 /Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/Assembly-CSharp.dll
 /Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/UnityEngine.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/Assembly-CSharp-firstpass.dll

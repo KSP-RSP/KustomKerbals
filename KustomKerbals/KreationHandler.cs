@@ -32,6 +32,10 @@ namespace KustomKerbals
 		public float sliderValue2 = 0.0f;
 		public int kerbal { get; set; }
 		public static string Path = (KSPUtil.ApplicationRootPath + HighLogic.CurrentGame + "peristent.sfs");
+		bool career = false;
+		string Trait = "Pilot";
+		int traitInt = 0;
+		private static ApplicationLauncherButton appLauncherButton;
 
 		public void Start()
 		{
@@ -41,6 +45,25 @@ namespace KustomKerbals
 			//Move the window to the center of the screen
 			windowPosition.x = Screen.width / 2 - windowPosition.width / 2;
 			windowPosition.y = Screen.height / 2 - windowPosition.height / 2;
+
+			if (ApplicationLauncher.Ready && appLauncherButton == null) {
+
+				appLauncherButton = ApplicationLauncher.Instance.AddModApplication(
+					() => { toggleGUI(true); },
+					() => { toggleGUI(false); },
+					() => {}, // DoNothing! :)
+					() => {},
+					() => {},
+					() => {},
+					ApplicationLauncher.AppScenes.SPACECENTER,
+					(Texture)GameDatabase.Instance.GetTexture("KustomKerbals/textures/toolbar", false));
+			}
+
+		}
+
+		void toggleGUI(bool state) {
+
+			windowState = state;
 
 		}
 
@@ -58,11 +81,46 @@ namespace KustomKerbals
 
 			}
 
+			if (HighLogic.CurrentGame.Mode == Game.Modes.CAREER) {
+
+				career = true;
+
+			} else {
+
+				career = false;
+
+			}
+
+			if (traitInt == 0) {
+
+				Trait = "Pilot";
+
+			} else if (traitInt == 1) {
+
+				Trait = "Engineer";
+
+			} else if (traitInt == 2) {
+
+				Trait = "Scientist";
+
+			}
+
 			if ((GameSettings.MODIFIER_KEY.GetKey()) && Input.GetKeyDown(KeyCode.K))
 			{
 				windowState = !windowState;
 
-				Debug.Log("KK window opened");
+				if (windowState) {
+					Debug.Log ("KK window opened");
+				}
+
+			}
+			if (windowState) {
+
+				appLauncherButton.SetTrue (true);
+
+			} else {
+
+				appLauncherButton.SetFalse (true);
 
 			}
 		}
@@ -77,6 +135,7 @@ namespace KustomKerbals
 			kerbal.stupidity = sliderValue2;
 			kerbal.isBadass = buttonState;
 
+			KerbalRoster.SetExperienceTrait (kerbal, Trait);
 
 			//Find out gender
 			if (male == false) {
@@ -90,10 +149,8 @@ namespace KustomKerbals
 
 			}
 
-			//How to set trait
-			//				KerbalRoster.SetExperienceTrait(kerbal, "Pilot");
-			//				KerbalRoster.SetExperienceTrait(kerbal, "Engineer");
-			//				KerbalRoster.SetExperienceTrait(kerbal, "Scientist");
+
+
 		}
 
 		#region rendering
@@ -129,10 +186,22 @@ namespace KustomKerbals
 
 			//Toggle female/male
 			GUILayout.BeginHorizontal();
-			GUILayout.Label("Toggle Male/Female: ");
 			if (GUILayout.Button (gender)) {
 
 				male = !male;
+
+			}
+			if (GUILayout.Button (Trait)) {
+
+				if (traitInt < 2) {
+
+					traitInt += 1;
+
+				} else {
+
+					traitInt = 0;
+
+				}
 
 			}
 			GUILayout.EndHorizontal();
@@ -158,7 +227,7 @@ namespace KustomKerbals
 			GUILayout.BeginHorizontal();
 			if (GUILayout.Button("Kreate Kustom Kerbal")) {
 				
-				if (stringToEdit == "Jebediah Kerman Jr." && sliderValue == 0.0f && sliderValue2 == 0.0f && buttonState == false && male == true)
+				if (stringToEdit == "My Kustom Kerbal" && sliderValue == 0.0f && sliderValue2 == 0.0f && buttonState == false && male == true && Trait == "Pilot")
 				{
 					
 					ProtoCrewMember kerbal = HighLogic.CurrentGame.CrewRoster.GetNewKerbal();
@@ -166,6 +235,8 @@ namespace KustomKerbals
 					windowState = false;
 					ScreenMessages.PostScreenMessage("Random Kerbal Spawned, closing window...", 1, ScreenMessageStyle.UPPER_CENTER);
 					Debug.Log("Random Kerbal Spawned");
+					appLauncherButton.SetFalse (true);
+
 				}
 				else
 				{
@@ -175,6 +246,7 @@ namespace KustomKerbals
 					SpawnKerbal(kerbal);
 					windowState = false;
 					ScreenMessages.PostScreenMessage("Kustom Kerbal Spawned, closing window...", 1, ScreenMessageStyle.UPPER_CENTER);
+					appLauncherButton.SetFalse (true);
 
 				}
 			}
