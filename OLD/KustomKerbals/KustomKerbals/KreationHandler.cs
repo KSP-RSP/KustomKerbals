@@ -33,6 +33,7 @@ namespace KustomKerbals
         public static bool windowState = false;
         public static bool isKSCLocked = false;
         public string stringToEdit = "Jebediah Kerman Jr.";
+		public string traitString = "(Pilot, Engineer, Scientist)";
         public float sliderValue = 0.0f;
         public float sliderValue2 = 0.0f;
         public int kerbal { get; set; }
@@ -80,7 +81,7 @@ namespace KustomKerbals
             kerbal.isBadass = buttonState;
 
 
-
+			//Find out gender
 			if (femaleState == true) {
 
 				kerbal.gender = ProtoCrewMember.Gender.Female;
@@ -94,6 +95,27 @@ namespace KustomKerbals
 
 			}
 
+			//Figure out whether the kerbal is a pilot, scientist, or engineer
+			if (pilotState == true) {
+
+				KerbalRoster.SetExperienceTrait(kerbal, "Pilot");
+
+			}
+			if (scientistState == true) {
+
+				KerbalRoster.SetExperienceTrait(kerbal, "Scientist");
+
+			}
+			if (engineerState == true) {
+
+				KerbalRoster.SetExperienceTrait(kerbal, "Engineer");
+
+			}
+
+			//How to set trait
+			//				KerbalRoster.SetExperienceTrait(kerbal, "Pilot");
+			//				KerbalRoster.SetExperienceTrait(kerbal, "Engineer");
+			//				KerbalRoster.SetExperienceTrait(kerbal, "Scientist");
         }
 		//Gets a new kerbal and sets his/her stats.
 		private void SpawnBadassKerbal(int count)
@@ -104,6 +126,27 @@ namespace KustomKerbals
 			kerbal.stupidity = sliderValue2;
 			kerbal.isBadass = true;
 
+			//Figure out whether the kerbal is a pilot, scientist, or engineer
+			if (pilotState == true) {
+
+				KerbalRoster.SetExperienceTrait(kerbal, "Pilot");
+
+			}
+			if (scientistState == true) {
+
+				KerbalRoster.SetExperienceTrait(kerbal, "Scientist");
+
+			}
+			if (engineerState == true) {
+
+				KerbalRoster.SetExperienceTrait(kerbal, "Engineer");
+
+			}
+
+			//How to set trait
+//				KerbalRoster.SetExperienceTrait(kerbal, "Pilot");
+//				KerbalRoster.SetExperienceTrait(kerbal, "Engineer");
+//				KerbalRoster.SetExperienceTrait(kerbal, "Scientist");
 
 
 			if (femaleState == true) {
@@ -117,6 +160,7 @@ namespace KustomKerbals
 
 			}
 
+
 		}
 		private void SpawnMarkKerbal(int count)
 		{
@@ -126,13 +170,17 @@ namespace KustomKerbals
 			kerbal.stupidity = sliderValue2;
 			kerbal.isBadass = true;
 			kerbal.gender = ProtoCrewMember.Gender.Male;
-			//kerbal.experienceTrait = Scientist;
+			KerbalRoster.SetExperienceTrait(kerbal, "Scientist");
+			//Mark Watney is also an engineer, but this way he can science the shit out of this...
+
 		}
 
         //makes the new kerbal available for use.
         private void SpawnKerbal(ProtoCrewMember kerbal)
         {
-            kerbal.rosterStatus = ProtoCrewMember.RosterStatus.Available;
+            //kerbal.rosterStatus = ProtoCrewMember.RosterStatus.Available;
+			kerbal.type = ProtoCrewMember.KerbalType.Applicant;
+
         }
 
 
@@ -151,6 +199,7 @@ namespace KustomKerbals
 				femaleState = false;
 
 			}
+			//Seems redundant, but is necessary if you deselect both
 			if (femaleState == false) {
 				
 				maleState = true;
@@ -161,6 +210,32 @@ namespace KustomKerbals
 				femaleState = true;
 				
 			}
+
+			if (traitString == "pilot") {
+
+				pilotState = true;
+				engineerState = false;
+				scientistState = false;
+
+			} else if (traitString == "scientist") {
+
+				pilotState = false;
+				engineerState = false;
+				scientistState = true;
+
+			} else if (traitString == "engineer") {
+
+				pilotState = false;
+				engineerState = true;
+				scientistState = false;
+
+			} 
+			else {
+
+
+
+			}
+				
 
 
 
@@ -215,15 +290,14 @@ namespace KustomKerbals
             buttonState = GUILayout.Toggle(buttonState, "Badass: " + buttonState);
             GUILayout.EndHorizontal();
 
-//			//Sets whether the kerbal is a scientist engineer, or pilot (WIP)
-//			GUILayout.BeginHorizontal();
-//			pilotState = GUILayout.Toggle(pilotState, "Pilot: " + pilotState);
-//			engineerState = GUILayout.Toggle(engineerState, "Engineer: " + engineerState);
-//			scientistState = GUILayout.Toggle(scientistState, "Scientist: " + scientistState);
-//			GUILayout.EndHorizontal();
+			//Sets whether the kerbal is a scientist engineer, or pilot
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("Trait:");
+			traitString = GUILayout.TextField(traitString, 50);
+			GUILayout.EndHorizontal();
 
             //Button to create the kerbal using above paramaters.
-            if (GUI.Button(new Rect(7, 190, 200, 35), "Kreate Kustom Kerbal"))
+            if (GUI.Button(new Rect(7, 190, 220, 35), "Kreate Kustom Kerbal"))
             {
                 if (isKSCLocked)
                 {
@@ -291,7 +365,10 @@ namespace KustomKerbals
                     SpawnKerbal(kerbal);
                     windowState = false;
                     ScreenMessages.PostScreenMessage("Kustom Kerbal Spawned, closing window...", 1, ScreenMessageStyle.UPPER_CENTER);
-                }
+					traitString.ToLower ();
+
+
+				}
             }
 
             GUI.DragWindow();
