@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using KustomKerbals;
 
 namespace KustomKerbals
 {
@@ -23,7 +24,7 @@ namespace KustomKerbals
 	[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
 	public class KK : MonoBehaviour
 	{
-		private static Rect windowPosition = new Rect(0, 0, 370, 280);
+		private static Rect windowPosition = new Rect(0, 0, 370, 320);
 		private static bool buttonState = false;
 		private static bool male = true;
 		public string gender = "Male";
@@ -43,6 +44,10 @@ namespace KustomKerbals
 		bool overrideState = false;
 		bool closeOnComplete = true;
 		List<string> names = new List<string>();
+		public static bool KrakenEnabled = false;
+		public Rect krakenRect = new Rect(400, 400, 200, 400);
+		public Vector2 KrakenScrollPosition = new Vector2(0, 0);
+		bool KrakenArmed = false;
 
 		public void Start()
 		{
@@ -141,6 +146,12 @@ namespace KustomKerbals
 
 			}
 
+			if (windowState == false) {
+
+				KrakenEnabled = false;
+
+			}
+
 		}
 
 		//Gets a new kerbal and sets his/her stats.
@@ -207,6 +218,12 @@ namespace KustomKerbals
 			if (warningState) {
 
 				warningRect = GUI.Window (1235, warningRect, warningWindow, "Warning: ");
+
+			}
+
+			if (KrakenEnabled) {
+
+				krakenRect = GUI.Window (1236, krakenRect, krakenWindow, "Kraken Feeding");
 
 			}
 
@@ -330,10 +347,59 @@ namespace KustomKerbals
 
 			GUILayout.EndHorizontal ();
 
+			GUILayout.BeginHorizontal ();
+			if (GUILayout.Button("Kraken Feeding")) {
+
+				KrakenEnabled = !KrakenEnabled;
+
+			}
+			GUILayout.EndHorizontal ();
+
 			GUI.DragWindow();
 
 		}
 
 		#endregion
+
+
+		#region KrakenHandler
+
+		public void krakenWindow(int windowID) {
+
+			GUILayout.BeginVertical ();
+			GUILayout.Label ("Choose a Kerbal to feed to the Kraken");
+			GUILayout.EndVertical ();
+			Debug.Log ("Test");
+			KrakenScrollPosition = GUILayout.BeginScrollView (KrakenScrollPosition);
+			foreach (ProtoCrewMember kerb in HighLogic.CurrentGame.CrewRoster.Crew) {
+
+				if (GUILayout.Button (kerb.name)) {
+
+					if (KrakenArmed) {
+						kerb.Die ();
+						kerb.type = ProtoCrewMember.KerbalType.Unowned;
+					}
+
+				}
+
+			}
+			GUILayout.EndScrollView ();
+
+			GUILayout.BeginVertical ();
+			KrakenArmed = GUILayout.Toggle (KrakenArmed, "Armed: " + KrakenArmed.ToString());
+			if (GUILayout.Button("Close")) {
+
+				KrakenEnabled = false;
+
+			}
+			GUILayout.EndVertical ();
+
+			GUI.DragWindow ();
+
+		}
+
+		#endregion
+
+
 	}
 }

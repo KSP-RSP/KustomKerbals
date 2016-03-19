@@ -1,12 +1,10 @@
 ﻿<Properties StartupItem="KustomKerbals/KustomKerbals.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="KustomKerbals/KreationHandler.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="KustomKerbals/KrakenHandler.cs">
     <Files>
-      <File FileName="KustomKerbals/KreationHandler.cs" Line="125" Column="5" />
-      <File FileName="KustomKerbals/Extensions/RectExtensions.cs" Line="1" Column="1" />
-      <File FileName="../../Desktop/OLD/KustomKerbals/KustomKerbals/Extensions/RectExtensions.cs" Line="1" Column="1" />
-      <File FileName="KustomKerbals/Properties/AssemblyInfo.cs" Line="1" Column="1" />
-      <File FileName="../../../../Volumes/External Storage/All KSP/BadS-Kerbals/src/Renamer/Renamer.cs" Line="1" Column="1" />
+      <File FileName="KustomKerbals/KreationHandler.cs" Line="147" Column="5" />
+      <File FileName="KustomKerbals/Editor.cs" Line="2" Column="19" />
+      <File FileName="KustomKerbals/KrakenHandler.cs" Line="7" Column="49" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

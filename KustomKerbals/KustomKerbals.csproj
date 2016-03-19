@@ -42,8 +42,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="KreationHandler.cs" />
-    <Compile Include="Editor.cs" />
-    <Compile Include="KrakenHandler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
