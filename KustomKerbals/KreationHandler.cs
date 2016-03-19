@@ -36,35 +36,48 @@ namespace KustomKerbals
 		bool closeOnComplete = true;
 		public static bool KrakenEnabled = false;
 		bool KrakenArmed = false;
+		public static bool editorEnabled = false;
+		private static bool editMale = true;
+		private static bool editBadS = false;
+		bool krakenFloat = false;
+		bool editFloat = false;
 
 		//Strings
 		public string gender = "Male";
 		public string stringToEdit = "My Kustom Kerbal";
 		public static string Path = (KSPUtil.ApplicationRootPath + HighLogic.CurrentGame + "peristent.sfs");
 		string Trait = "Pilot";
+		public string editGender = "Male";
+		public string editName = "No Kerbal Selected!";
+		string editTrait = "Pilot";
 
 		//floats
 		public float sliderValue = 0.0f;
 		public float sliderValue2 = 0.0f;
+		public float editCourage = 0.0f;
+		public float editStupidity = 0.0f;
 
 		//Ints
 		public int kerbal { get; set; }
 		int traitInt = 0;
+		int editTraitInt = 0;
 
 		//Rects
 		private static Rect windowPosition = new Rect(0, 0, 370, 315);
 		public Rect krakenRect = new Rect(0, 0, 200, 400);
 		public static Rect warningRect = new Rect (0, 0, 230, 180);
+		private static Rect editorRect = new Rect(0, 0, 370, 400);
 
 		//Lists
 		List<string> names = new List<string>();
 
 		//Vector2s
 		public Vector2 KrakenScrollPosition = new Vector2(0, 0);
+		public Vector2 editorScrollPosition = new Vector2(0, 0);
 
-		//AppLauncherButtons
-
+		//Etc.
 		private static ApplicationLauncherButton appLauncherButton;
+		ProtoCrewMember kerbalToEdit;
 
 		public void Start()
 		{
@@ -79,6 +92,8 @@ namespace KustomKerbals
 			//Move window to next to the main window
 			krakenRect.x = windowPosition.x - windowPosition.width / 2 - 15;
 			krakenRect.y = windowPosition.y;
+			editorRect.x = windowPosition.x + windowPosition.width;
+			editorRect.y = windowPosition.y;
 
 			//Thanks bananashavings http://forum.kerbalspaceprogram.com/index.php?/profile/156147-bananashavings/ - https://gist.github.com/bananashavings/e698f4359e1628b5d6ef
 			//Also thanks to Crzyrndm for the fix to that code!
@@ -131,6 +146,30 @@ namespace KustomKerbals
 
 			}
 
+			if (editMale) {
+
+				editGender = "Male";
+
+			} else {
+
+				editGender = "Female";
+
+			}
+
+			if (editTraitInt == 0) {
+
+				editTrait = "Pilot";
+
+			} else if (editTraitInt == 1) {
+
+				editTrait = "Engineer";
+
+			} else if (editTraitInt == 2) {
+
+				editTrait = "Scientist";
+
+			}
+
 			if ((GameSettings.MODIFIER_KEY.GetKey()) && Input.GetKeyDown(KeyCode.K))
 			{
 				windowState = !windowState;
@@ -171,6 +210,21 @@ namespace KustomKerbals
 			if (windowState == false) {
 
 				KrakenEnabled = false;
+				editorEnabled = false;
+
+			}
+				
+			if (krakenFloat == false) {
+
+				krakenRect.x = windowPosition.x - windowPosition.width / 2 - 15;
+				krakenRect.y = windowPosition.y;
+
+			}
+
+			if (editFloat == false) {
+
+				editorRect.x = windowPosition.x + windowPosition.width;
+				editorRect.y = windowPosition.y;
 
 			}
 
@@ -246,6 +300,12 @@ namespace KustomKerbals
 			if (KrakenEnabled) {
 
 				krakenRect = GUI.Window (1236, krakenRect, krakenWindow, "Kraken Feeding");
+
+			}
+
+			if (editorEnabled) {
+
+				editorRect = GUI.Window (1237, editorRect, editor, "Kerbal Editor");
 
 			}
 
@@ -375,6 +435,11 @@ namespace KustomKerbals
 				KrakenEnabled = !KrakenEnabled;
 
 			}
+			if (GUILayout.Button("Kerbal Editor")) {
+
+				editorEnabled = !editorEnabled;
+
+			}
 			GUILayout.EndHorizontal ();
 
 			GUI.DragWindow();
@@ -413,6 +478,7 @@ namespace KustomKerbals
 			GUILayout.EndScrollView ();
 			GUILayout.BeginVertical ();
 			KrakenArmed = GUILayout.Toggle (KrakenArmed, "Armed: " + KrakenArmed.ToString());
+			krakenFloat = GUILayout.Toggle (krakenFloat, "Float window");
 			if (GUILayout.Button("Close")) {
 
 				KrakenEnabled = false;
@@ -420,12 +486,158 @@ namespace KustomKerbals
 			}
 			GUILayout.EndVertical ();
 
-			GUI.DragWindow ();
+			if (krakenFloat) {
+
+				GUI.DragWindow ();
+
+			}
 
 		}
 
 		#endregion
 
+		#region editor
+
+		public void editor(int windowID) {
+
+			editorScrollPosition = GUILayout.BeginScrollView (editorScrollPosition);
+			foreach (ProtoCrewMember kerb in HighLogic.CurrentGame.CrewRoster.Crew) {
+
+				if (GUILayout.Button (kerb.name)) {
+
+					kerbalToEdit = kerb;
+					editCourage = kerb.courage;
+					editStupidity = kerb.stupidity;
+					editBadS = kerb.isBadass;
+					editName = kerb.name;
+					if (kerb.gender == ProtoCrewMember.Gender.Female) {
+
+						editGender = "Female";
+						editMale = false;
+
+					} else {
+
+						editGender = "Male";
+						editMale = true;
+
+					}
+					editTrait = kerb.trait;
+					if (editTrait == "Pilot") {
+						
+						editTraitInt = 0;
+
+					} else if (editTrait == "Engineer") {
+
+						editTraitInt = 1;
+
+					} else {
+
+						editTraitInt = 2;
+
+					}
+
+				}
+
+			}
+			GUILayout.EndScrollView ();
+
+			//Field to type in kerbal's name.
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("Name:");
+			editName = GUILayout.TextField(editName, 50);
+			GUILayout.EndHorizontal();
+
+			//Toggle female/male
+			GUILayout.BeginHorizontal();
+			if (GUILayout.Button (editGender)) {
+
+				editMale = !editMale;
+
+			}
+			if (GUILayout.Button (editTrait)) {
+
+				if (editTraitInt < 2) {
+
+					editTraitInt += 1;
+
+				} else {
+
+					editTraitInt = 0; 
+
+				}
+
+			}
+
+			GUILayout.EndHorizontal ();
+
+			//Sets kerbal's courage. 
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("Courage:");
+			editCourage = GUILayout.HorizontalSlider(editCourage, 0.0f, 1.0f);
+			GUILayout.EndHorizontal();
+
+			//Sets kerbal's stupidity.
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("Stupidity:");
+			editStupidity = GUILayout.HorizontalSlider(editStupidity, 0.0f, 1.0f);
+			GUILayout.EndHorizontal();
+
+			//Toggles BadS state.
+			GUILayout.BeginHorizontal();
+			editBadS = GUILayout.Toggle(editBadS, "BadS: " + editBadS);
+			GUILayout.EndHorizontal();
+
+			GUILayout.BeginHorizontal ();
+			editFloat = GUILayout.Toggle (editFloat, "Float window");
+			GUILayout.EndHorizontal ();
+
+			if (GUILayout.Button ("Edit Kerbal")) {
+
+				if (kerbalToEdit == null) {
+
+					ScreenMessages.PostScreenMessage ("You must select a Kerbal first!", 1);
+
+				} else {
+					
+					kerbalToEdit.name = editName;
+					if (editGender == "Female") {
+					
+						kerbalToEdit.gender = ProtoCrewMember.Gender.Female;
+						
+					} else {
+
+						kerbalToEdit.gender = ProtoCrewMember.Gender.Male;
+
+					}
+
+					KerbalRoster.SetExperienceTrait (kerbalToEdit, editTrait);
+
+					kerbalToEdit.courage = editCourage;
+					kerbalToEdit.stupidity = editStupidity;
+
+					kerbalToEdit.isBadass = editBadS;
+
+					ScreenMessages.PostScreenMessage (kerbalToEdit.name + " has been edited!", 1, ScreenMessageStyle.UPPER_CENTER);
+
+				}
+
+			}
+
+			if (GUILayout.Button ("Close")) {
+
+				editorEnabled = false;
+
+			}
+
+			if (editFloat) {
+
+				GUI.DragWindow ();
+
+			}
+
+		}
+
+		#endregion
 
 	}
 }
