@@ -562,7 +562,7 @@ namespace KustomKerbals
 
 				} else {
 
-					editTraitInt = 0; 
+					editTraitInt = 0;
 
 				}
 
