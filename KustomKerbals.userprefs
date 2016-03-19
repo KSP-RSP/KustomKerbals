@@ -1,10 +1,8 @@
 ﻿<Properties StartupItem="KustomKerbals/KustomKerbals.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="KustomKerbals/KrakenHandler.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="KustomKerbals/KreationHandler.cs">
     <Files>
-      <File FileName="KustomKerbals/KreationHandler.cs" Line="147" Column="5" />
-      <File FileName="KustomKerbals/Editor.cs" Line="2" Column="19" />
-      <File FileName="KustomKerbals/KrakenHandler.cs" Line="7" Column="49" />
+      <File FileName="KustomKerbals/KreationHandler.cs" Line="384" Column="242" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

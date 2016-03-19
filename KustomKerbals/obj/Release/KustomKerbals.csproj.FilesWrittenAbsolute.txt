@@ -1,0 +1,8 @@
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/obj/Release/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Release/KustomKerbals.dll.mdb
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Release/KustomKerbals.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/obj/Release/KustomKerbals.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/obj/Release/KustomKerbals.dll.mdb
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Release/Assembly-CSharp.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Release/UnityEngine.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Release/Assembly-CSharp-firstpass.dll

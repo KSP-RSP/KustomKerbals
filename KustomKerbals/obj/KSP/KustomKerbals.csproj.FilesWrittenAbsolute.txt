@@ -1,0 +1,3 @@
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/obj/KSP/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/Clifton/Documents/All KSP/KSP_osx/GameData/KustomKerbals/KustomKerbals.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/obj/KSP/KustomKerbals.dll

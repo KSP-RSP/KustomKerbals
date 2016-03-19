@@ -24,30 +24,47 @@ namespace KustomKerbals
 	[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
 	public class KK : MonoBehaviour
 	{
-		private static Rect windowPosition = new Rect(0, 0, 370, 320);
+
+		//Bools
 		private static bool buttonState = false;
 		private static bool male = true;
-		public string gender = "Male";
 		public static bool windowState = false;
 		public static bool isKSCLocked = false;
-		public string stringToEdit = "My Kustom Kerbal";
-		public float sliderValue = 0.0f;
-		public float sliderValue2 = 0.0f;
-		public int kerbal { get; set; }
-		public static string Path = (KSPUtil.ApplicationRootPath + HighLogic.CurrentGame + "peristent.sfs");
-		string Trait = "Pilot";
-		int traitInt = 0;
-		private static ApplicationLauncherButton appLauncherButton;
 		bool exists = false;
 		bool warningState = false;
-		public static Rect warningRect = new Rect (0, 0, 230, 180);
 		bool overrideState = false;
 		bool closeOnComplete = true;
-		List<string> names = new List<string>();
 		public static bool KrakenEnabled = false;
-		public Rect krakenRect = new Rect(400, 400, 200, 400);
-		public Vector2 KrakenScrollPosition = new Vector2(0, 0);
 		bool KrakenArmed = false;
+
+		//Strings
+		public string gender = "Male";
+		public string stringToEdit = "My Kustom Kerbal";
+		public static string Path = (KSPUtil.ApplicationRootPath + HighLogic.CurrentGame + "peristent.sfs");
+		string Trait = "Pilot";
+
+		//floats
+		public float sliderValue = 0.0f;
+		public float sliderValue2 = 0.0f;
+
+		//Ints
+		public int kerbal { get; set; }
+		int traitInt = 0;
+
+		//Rects
+		private static Rect windowPosition = new Rect(0, 0, 370, 315);
+		public Rect krakenRect = new Rect(0, 0, 200, 400);
+		public static Rect warningRect = new Rect (0, 0, 230, 180);
+
+		//Lists
+		List<string> names = new List<string>();
+
+		//Vector2s
+		public Vector2 KrakenScrollPosition = new Vector2(0, 0);
+
+		//AppLauncherButtons
+
+		private static ApplicationLauncherButton appLauncherButton;
 
 		public void Start()
 		{
@@ -59,13 +76,18 @@ namespace KustomKerbals
 			windowPosition.y = Screen.height / 2 - windowPosition.height / 2;
 			warningRect.x = Screen.width / 2 - warningRect.width / 2;
 			warningRect.y = Screen.height / 2 - warningRect.height / 2;
+			//Move window to next to the main window
+			krakenRect.x = windowPosition.x - windowPosition.width / 2 - 15;
+			krakenRect.y = windowPosition.y;
 
+			//Thanks bananashavings http://forum.kerbalspaceprogram.com/index.php?/profile/156147-bananashavings/ - https://gist.github.com/bananashavings/e698f4359e1628b5d6ef
+			//Also thanks to Crzyrndm for the fix to that code!
 			if (ApplicationLauncher.Ready && appLauncherButton == null) {
 
 				appLauncherButton = ApplicationLauncher.Instance.AddModApplication(
 					() => { toggleGUI(true); },
 					() => { toggleGUI(false); },
-					() => {}, // DoNothing! :)
+					() => {},
 					() => {},
 					() => {},
 					() => {},
@@ -81,7 +103,7 @@ namespace KustomKerbals
 
 		}
 
-		//Tells the window to open.
+		//Tells the window to open, gets whether the Kerbal is male or female, handles figuring out whether a Kerbal with that name exists, etc.
 		public void Update()
 		{
 
@@ -154,7 +176,7 @@ namespace KustomKerbals
 
 		}
 
-		//Gets a new kerbal and sets his/her stats.
+		//Gets a new kerbal and sets his/her stats based on whether there is already a Kerbal of that name or not, or if the person wants o override that check
 		private void SpawnKerbal(int count, bool overrideState)
 		{
 
@@ -172,7 +194,7 @@ namespace KustomKerbals
 
 				KerbalRoster.SetExperienceTrait (kerbal, Trait);
 
-				//Find out the gender
+				//Find out and set the gender
 				if (male == false) {
 
 					kerbal.gender = ProtoCrewMember.Gender.Female;
@@ -369,22 +391,26 @@ namespace KustomKerbals
 			GUILayout.BeginVertical ();
 			GUILayout.Label ("Choose a Kerbal to feed to the Kraken");
 			GUILayout.EndVertical ();
-			Debug.Log ("Test");
 			KrakenScrollPosition = GUILayout.BeginScrollView (KrakenScrollPosition);
 			foreach (ProtoCrewMember kerb in HighLogic.CurrentGame.CrewRoster.Crew) {
 
 				if (GUILayout.Button (kerb.name)) {
 
 					if (KrakenArmed) {
+						
 						kerb.Die ();
 						kerb.type = ProtoCrewMember.KerbalType.Unowned;
+
+					} else {
+
+						ScreenMessages.PostScreenMessage ("You must arm the Kraken before using it.", 1);
+
 					}
 
 				}
 
 			}
 			GUILayout.EndScrollView ();
-
 			GUILayout.BeginVertical ();
 			KrakenArmed = GUILayout.Toggle (KrakenArmed, "Armed: " + KrakenArmed.ToString());
 			if (GUILayout.Button("Close")) {
