@@ -12,7 +12,9 @@
 //DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace KustomKerbals
@@ -21,7 +23,7 @@ namespace KustomKerbals
 	[KSPAddon(KSPAddon.Startup.SpaceCentre, false)]
 	public class KK : MonoBehaviour
 	{
-		private static Rect windowPosition = new Rect(0, 0, 370, 265);
+		private static Rect windowPosition = new Rect(0, 0, 370, 280);
 		private static bool buttonState = false;
 		private static bool male = true;
 		public string gender = "Male";
@@ -32,10 +34,15 @@ namespace KustomKerbals
 		public float sliderValue2 = 0.0f;
 		public int kerbal { get; set; }
 		public static string Path = (KSPUtil.ApplicationRootPath + HighLogic.CurrentGame + "peristent.sfs");
-		bool career = false;
 		string Trait = "Pilot";
 		int traitInt = 0;
 		private static ApplicationLauncherButton appLauncherButton;
+		bool exists = false;
+		bool warningState = false;
+		public static Rect warningRect = new Rect (0, 0, 230, 180);
+		bool overrideState = false;
+		bool closeOnComplete = true;
+		List<string> names = new List<string>();
 
 		public void Start()
 		{
@@ -45,6 +52,8 @@ namespace KustomKerbals
 			//Move the window to the center of the screen
 			windowPosition.x = Screen.width / 2 - windowPosition.width / 2;
 			windowPosition.y = Screen.height / 2 - windowPosition.height / 2;
+			warningRect.x = Screen.width / 2 - warningRect.width / 2;
+			warningRect.y = Screen.height / 2 - warningRect.height / 2;
 
 			if (ApplicationLauncher.Ready && appLauncherButton == null) {
 
@@ -81,16 +90,6 @@ namespace KustomKerbals
 
 			}
 
-			if (HighLogic.CurrentGame.Mode == Game.Modes.CAREER) {
-
-				career = true;
-
-			} else {
-
-				career = false;
-
-			}
-
 			if (traitInt == 0) {
 
 				Trait = "Pilot";
@@ -110,7 +109,9 @@ namespace KustomKerbals
 				windowState = !windowState;
 
 				if (windowState) {
+					
 					Debug.Log ("KK window opened");
+
 				}
 
 			}
@@ -123,33 +124,67 @@ namespace KustomKerbals
 				appLauncherButton.SetFalse (true);
 
 			}
+
+			foreach (ProtoCrewMember kerb in HighLogic.CurrentGame.CrewRoster.Crew) {
+
+				names.Add (kerb.name);
+
+			}
+
+			if (names.Contains (stringToEdit)) {
+
+				exists = true;
+
+			} else {
+
+				exists = false;
+
+			}
+
 		}
 
 		//Gets a new kerbal and sets his/her stats.
-		private void SpawnKerbal(int count)
+		private void SpawnKerbal(int count, bool overrideState)
 		{
 
-			ProtoCrewMember kerbal = HighLogic.CurrentGame.CrewRoster.GetNewKerbal();
-			kerbal.name = stringToEdit;
-			kerbal.courage = sliderValue;
-			kerbal.stupidity = sliderValue2;
-			kerbal.isBadass = buttonState;
+			if (exists && overrideState == false) {
 
-			KerbalRoster.SetExperienceTrait (kerbal, Trait);
+				warningState = true;
 
-			//Find out gender
-			if (male == false) {
+			} else {
 
-				kerbal.gender = ProtoCrewMember.Gender.Female;
+				ProtoCrewMember kerbal = HighLogic.CurrentGame.CrewRoster.GetNewKerbal ();
+				kerbal.name = stringToEdit;
+				kerbal.courage = sliderValue;
+				kerbal.stupidity = sliderValue2;
+				kerbal.isBadass = buttonState;
+
+				KerbalRoster.SetExperienceTrait (kerbal, Trait);
+
+				//Find out the gender
+				if (male == false) {
+
+					kerbal.gender = ProtoCrewMember.Gender.Female;
+
+				}
+				if (male) {
+
+					kerbal.gender = ProtoCrewMember.Gender.Male;
+
+				}
+
+				if (closeOnComplete) {
+
+					appLauncherButton.SetFalse (true);
+					ScreenMessages.PostScreenMessage ("Kustom Kerbal Spawned, closing window...", 1, ScreenMessageStyle.UPPER_CENTER);
+
+				} else {
+
+					ScreenMessages.PostScreenMessage ("Kustom Kerbal Spawned.", 1, ScreenMessageStyle.UPPER_CENTER);
+
+				}
 
 			}
-			if (male) {
-
-				kerbal.gender = ProtoCrewMember.Gender.Male;
-
-			}
-
-
 
 		}
 
@@ -169,14 +204,51 @@ namespace KustomKerbals
 
 			}
 
+			if (warningState) {
+
+				warningRect = GUI.Window (1235, warningRect, warningWindow, "Warning: ");
+
+			}
+
+		}
+			
+		void warningWindow (int windowID) {
+
+			GUILayout.BeginHorizontal ();
+			GUILayout.Label ("A Kerbal with this name already exists.  This can cause unexpected problems when both are assigned, or on EVA.");
+			GUILayout.EndHorizontal ();
+
+			GUILayout.BeginHorizontal ();
+			overrideState = GUILayout.Toggle (overrideState, "Override");
+			GUILayout.EndHorizontal ();
+
+			GUILayout.BeginHorizontal ();
+			if (GUILayout.Button("OK (Override: " + overrideState.ToString() + ")")) {
+
+				if (overrideState) {
+
+					SpawnKerbal(kerbal, true);
+					warningState = false;
+					overrideState = false;
+
+				} else {
+
+					warningState = false;
+
+				}
+
+			}
+			GUILayout.EndHorizontal ();
+
 		}
 
 		private void OnWindow(int windowID)
 		{
-			//Warn the user not to make multiple kerbals to prevent errors
-			GUILayout.BeginHorizontal();
-			GUILayout.Label("Note: do not create multiple kerbals with the same name.");
-			GUILayout.EndHorizontal();
+
+			//Add some space
+			GUILayout.BeginHorizontal ();
+			GUILayout.Label ("");
+			GUILayout.EndHorizontal ();
 
 			//Field to type in kerbal's name.
 			GUILayout.BeginHorizontal();
@@ -223,6 +295,11 @@ namespace KustomKerbals
 			buttonState = GUILayout.Toggle(buttonState, "BadS: " + buttonState);
 			GUILayout.EndHorizontal();
 
+			//Toggles close on complete
+			GUILayout.BeginHorizontal();
+			closeOnComplete = GUILayout.Toggle(closeOnComplete, "Close On Complete: " + closeOnComplete);
+			GUILayout.EndHorizontal();
+
 			//Button to create the kerbal using above paramaters.
 			GUILayout.BeginHorizontal();
 			if (GUILayout.Button("Kreate Kustom Kerbal")) {
@@ -232,27 +309,29 @@ namespace KustomKerbals
 					
 					ProtoCrewMember kerbal = HighLogic.CurrentGame.CrewRoster.GetNewKerbal();
 					kerbal.rosterStatus = ProtoCrewMember.RosterStatus.Available;
-					windowState = false;
-					ScreenMessages.PostScreenMessage("Random Kerbal Spawned, closing window...", 1, ScreenMessageStyle.UPPER_CENTER);
+					ScreenMessages.PostScreenMessage("Random Kerbal Spawned.", 1, ScreenMessageStyle.UPPER_CENTER);
 					Debug.Log("Random Kerbal Spawned");
-					appLauncherButton.SetFalse (true);
 
 				}
 				else
 				{
 					
-					Debug.Log("Kustom Kerbal Kreated.");
-					Debug.Log("KK window closed.");
-					SpawnKerbal(kerbal);
-					windowState = false;
-					ScreenMessages.PostScreenMessage("Kustom Kerbal Spawned, closing window...", 1, ScreenMessageStyle.UPPER_CENTER);
-					appLauncherButton.SetFalse (true);
+					Debug.Log ("Kustom Kerbal Kreated.");
+					Debug.Log ("KK window closed.");
+					SpawnKerbal (kerbal, false);
 
 				}
 			}
+			if (GUILayout.Button ("Close")) {
+
+				appLauncherButton.SetFalse (true);
+
+			}
+
 			GUILayout.EndHorizontal ();
 
 			GUI.DragWindow();
+
 		}
 
 		#endregion
