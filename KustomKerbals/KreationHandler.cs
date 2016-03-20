@@ -41,6 +41,8 @@ namespace KustomKerbals
 		private static bool editBadS = false;
 		bool krakenFloat = false;
 		bool editFloat = false;
+		bool editExists = false;
+		bool editOverride = false;
 
 		//Strings
 		public string gender = "Male";
@@ -204,6 +206,16 @@ namespace KustomKerbals
 			} else {
 
 				exists = false;
+
+			}
+
+			if (names.Contains (editName) && editName != kerbalToEdit.name) {
+
+				editExists = true;
+
+			} else {
+
+				editExists = false;
 
 			}
 
@@ -591,6 +603,14 @@ namespace KustomKerbals
 			editFloat = GUILayout.Toggle (editFloat, "Float window");
 			GUILayout.EndHorizontal ();
 
+			if (editExists) {
+
+				GUILayout.BeginHorizontal ();
+				editOverride = GUILayout.Toggle (editOverride, "Override existing Kerbal check");
+				GUILayout.EndHorizontal ();
+
+			}
+
 			if (GUILayout.Button ("Edit Kerbal")) {
 
 				if (kerbalToEdit == null) {
@@ -598,26 +618,60 @@ namespace KustomKerbals
 					ScreenMessages.PostScreenMessage ("You must select a Kerbal first!", 1);
 
 				} else {
-					
-					kerbalToEdit.name = editName;
-					if (editGender == "Female") {
-					
-						kerbalToEdit.gender = ProtoCrewMember.Gender.Female;
-						
+
+					if (editExists) {
+
+						if (editOverride) {
+
+							kerbalToEdit.name = editName;
+							if (editGender == "Female") {
+
+								kerbalToEdit.gender = ProtoCrewMember.Gender.Female;
+
+							} else {
+
+								kerbalToEdit.gender = ProtoCrewMember.Gender.Male;
+
+							}
+
+							KerbalRoster.SetExperienceTrait (kerbalToEdit, editTrait);
+
+							kerbalToEdit.courage = editCourage;
+							kerbalToEdit.stupidity = editStupidity;
+
+							kerbalToEdit.isBadass = editBadS;
+
+							ScreenMessages.PostScreenMessage (kerbalToEdit.name + " has been edited!", 1, ScreenMessageStyle.UPPER_CENTER);
+
+						} else {
+
+							ScreenMessages.PostScreenMessage ("A Kerbal with the name " + kerbalToEdit.name + " already exists.  If you would like to continue, enable override existing Kerbal ckeck.", 1, ScreenMessageStyle.UPPER_CENTER);
+
+						}
+
 					} else {
+						
+						kerbalToEdit.name = editName;
+						if (editGender == "Female") {
+					
+							kerbalToEdit.gender = ProtoCrewMember.Gender.Female;
+						
+						} else {
 
-						kerbalToEdit.gender = ProtoCrewMember.Gender.Male;
+							kerbalToEdit.gender = ProtoCrewMember.Gender.Male;
 
+						}
+
+						KerbalRoster.SetExperienceTrait (kerbalToEdit, editTrait);
+
+						kerbalToEdit.courage = editCourage;
+						kerbalToEdit.stupidity = editStupidity;
+
+						kerbalToEdit.isBadass = editBadS;
+
+						ScreenMessages.PostScreenMessage (kerbalToEdit.name + " has been edited!", 1, ScreenMessageStyle.UPPER_CENTER);
+					
 					}
-
-					KerbalRoster.SetExperienceTrait (kerbalToEdit, editTrait);
-
-					kerbalToEdit.courage = editCourage;
-					kerbalToEdit.stupidity = editStupidity;
-
-					kerbalToEdit.isBadass = editBadS;
-
-					ScreenMessages.PostScreenMessage (kerbalToEdit.name + " has been edited!", 1, ScreenMessageStyle.UPPER_CENTER);
 
 				}
 
