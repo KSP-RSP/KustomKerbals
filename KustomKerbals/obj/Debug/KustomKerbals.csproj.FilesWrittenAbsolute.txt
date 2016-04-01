@@ -6,3 +6,6 @@
 /Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/Assembly-CSharp.dll
 /Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/UnityEngine.dll
 /Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/Assembly-CSharp-firstpass.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/KSPUtil.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/KSPCore.dll
+/Users/Clifton/Projects/KustomKerbals/KustomKerbals/bin/Debug/KSPAssets.dll

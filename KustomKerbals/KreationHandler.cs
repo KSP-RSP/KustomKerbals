@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using KustomKerbals;
+using KSP.UI.Screens;
 
 namespace KustomKerbals
 {
@@ -65,7 +66,7 @@ namespace KustomKerbals
 		int editTraitInt = 0;
 
 		//Rects
-		private static Rect windowPosition = new Rect(0, 0, 370, 315);
+		private static Rect windowPosition = new Rect(0, 0, 370, 325);
 		public Rect krakenRect = new Rect(0, 0, 200, 400);
 		public static Rect warningRect = new Rect (0, 0, 230, 180);
 		private static Rect editorRect = new Rect(0, 0, 370, 400);
@@ -99,7 +100,7 @@ namespace KustomKerbals
 
 			//Thanks bananashavings http://forum.kerbalspaceprogram.com/index.php?/profile/156147-bananashavings/ - https://gist.github.com/bananashavings/e698f4359e1628b5d6ef
 			//Also thanks to Crzyrndm for the fix to that code!
-			if (ApplicationLauncher.Ready && appLauncherButton == null) {
+			if (appLauncherButton == null) {
 
 				appLauncherButton = ApplicationLauncher.Instance.AddModApplication(
 					() => { toggleGUI(true); },
@@ -422,6 +423,12 @@ namespace KustomKerbals
 					kerbal.rosterStatus = ProtoCrewMember.RosterStatus.Available;
 					ScreenMessages.PostScreenMessage("Random Kerbal Spawned.", 1, ScreenMessageStyle.UPPER_CENTER);
 					Debug.Log("Random Kerbal Spawned");
+					if (closeOnComplete) {
+
+						ScreenMessages.PostScreenMessage("Closing window...", 1, ScreenMessageStyle.UPPER_CENTER);
+						windowState = false;
+
+					}
 
 				}
 				else
