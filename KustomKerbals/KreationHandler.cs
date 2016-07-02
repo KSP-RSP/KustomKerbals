@@ -194,7 +194,11 @@ namespace KustomKerbals
 
 			}
 
-			foreach (ProtoCrewMember kerb in HighLogic.CurrentGame.CrewRoster.Crew) {
+			List<ProtoCrewMember> kerbs = new List<ProtoCrewMember>(HighLogic.CurrentGame.CrewRoster.Crew);
+			for (int i = kerbs.Count - 1; i >= 0; --i)
+			{
+
+				ProtoCrewMember kerb = kerbs[i];
 
 				names.Add (kerb.name);
 
@@ -476,7 +480,11 @@ namespace KustomKerbals
 			GUILayout.Label ("Choose a Kerbal to feed to the Kraken");
 			GUILayout.EndVertical ();
 			KrakenScrollPosition = GUILayout.BeginScrollView (KrakenScrollPosition);
-			foreach (ProtoCrewMember kerb in HighLogic.CurrentGame.CrewRoster.Crew) {
+			List<ProtoCrewMember> kerbs = new List<ProtoCrewMember>(HighLogic.CurrentGame.CrewRoster.Crew);
+			for (int i = kerbs.Count - 1; i >= 0; --i)
+			{
+
+				ProtoCrewMember kerb = kerbs[i];
 
 				if (GUILayout.Button (kerb.name)) {
 
@@ -520,7 +528,11 @@ namespace KustomKerbals
 		public void editor(int windowID) {
 
 			editorScrollPosition = GUILayout.BeginScrollView (editorScrollPosition);
-			foreach (ProtoCrewMember kerb in HighLogic.CurrentGame.CrewRoster.Crew) {
+			List<ProtoCrewMember> kerbs = new List<ProtoCrewMember>(HighLogic.CurrentGame.CrewRoster.Crew);
+			for (int i = kerbs.Count - 1; i >= 0; --i)
+			{
+
+				ProtoCrewMember kerb = kerbs[i];
 
 				if (GUILayout.Button (kerb.name)) {
 

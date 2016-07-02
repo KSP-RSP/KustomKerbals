@@ -1,10 +1,13 @@
 ﻿<Properties StartupItem="KustomKerbals/KustomKerbals.csproj">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="KSP" />
+  <MonoDevelop.Ide.ItemProperties.KustomKerbals PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="KustomKerbals/KreationHandler.cs">
     <Files>
-      <File FileName="KustomKerbals/KreationHandler.cs" Line="1" Column="1" />
+      <File FileName="KustomKerbals/KreationHandler.cs" Line="535" Column="37" />
+      <File FileName="../DoxygenExample/DoxygenExample/examples/ExampleClass.cs" Line="8" Column="5" />
+      <File FileName="../DoxygenExample/DoxygenExample/DoThing.cs" Line="6" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
