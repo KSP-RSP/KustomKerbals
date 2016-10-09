@@ -26,9 +26,12 @@ namespace KustomKerbals
 	public class KK : MonoBehaviour
 	{
 
-		//Bools
-		private static bool buttonState = false;
+        #region defs
+
+        //Bools
+        private static bool buttonState = false;
 		private static bool male = true;
+        bool veteran = false;
 		public static bool windowState = false;
 		public static bool isKSCLocked = false;
 		bool exists = false;
@@ -40,7 +43,8 @@ namespace KustomKerbals
 		public static bool editorEnabled = false;
 		private static bool editMale = true;
 		private static bool editBadS = false;
-		bool krakenFloat = false;
+        bool editVeteran = false;
+        bool krakenFloat = false;
 		bool editFloat = false;
 		bool editExists = false;
 		bool editOverride = false;
@@ -81,8 +85,12 @@ namespace KustomKerbals
 		//Etc.
 		private static ApplicationLauncherButton appLauncherButton;
 		ProtoCrewMember kerbalToEdit;
+        ProtoCrewMember newKerbal;
+        bool getRandomKerbal;
 
-		public void Start()
+        #endregion
+
+        public void Start()
 		{
 			
 			Debug.Log("Kustom Kerbals loaded.");
@@ -124,6 +132,16 @@ namespace KustomKerbals
 		//Tells the window to open, gets whether the Kerbal is male or female, handles figuring out whether a Kerbal with that name exists, etc.
 		public void Update()
 		{
+
+            if (getRandomKerbal)
+            {
+                newKerbal = HighLogic.CurrentGame.CrewRoster.GetNewKerbal();
+                if (!HighLogic.CurrentGame.CrewRoster.Exists(newKerbal.name))
+                {
+                    stringToEdit = newKerbal.name;
+                    getRandomKerbal = false;
+                }
+            }
 
 			if (male) {
 
@@ -194,27 +212,15 @@ namespace KustomKerbals
 
 			}
 
-			List<ProtoCrewMember> kerbs = new List<ProtoCrewMember>(HighLogic.CurrentGame.CrewRoster.Crew);
-			for (int i = kerbs.Count - 1; i >= 0; --i)
-			{
+			if (HighLogic.CurrentGame.CrewRoster.Exists(stringToEdit))
+            {
+                exists = true;
+            } else
+            {
+                exists = false;
+            }
 
-				ProtoCrewMember kerb = kerbs[i];
-
-				names.Add (kerb.name);
-
-			}
-
-			if (names.Contains (stringToEdit)) {
-
-				exists = true;
-
-			} else {
-
-				exists = false;
-
-			}
-
-			if (names.Contains (editName) && editName != kerbalToEdit.name) {
+			if (HighLogic.CurrentGame.CrewRoster.Exists(editName) && editName != kerbalToEdit.name) {
 
 				editExists = true;
 
@@ -257,23 +263,24 @@ namespace KustomKerbals
 
 			} else {
 
-				ProtoCrewMember kerbal = HighLogic.CurrentGame.CrewRoster.GetNewKerbal ();
-				kerbal.name = stringToEdit;
-				kerbal.courage = sliderValue;
-				kerbal.stupidity = sliderValue2;
-				kerbal.isBadass = buttonState;
+                newKerbal = HighLogic.CurrentGame.CrewRoster.GetNewKerbal ();
+                newKerbal.ChangeName(stringToEdit);
+                newKerbal.courage = sliderValue;
+                newKerbal.stupidity = sliderValue2;
+                newKerbal.isBadass = buttonState;
+                newKerbal.veteran = veteran;
 
-				KerbalRoster.SetExperienceTrait (kerbal, Trait);
+				KerbalRoster.SetExperienceTrait (newKerbal, Trait);
 
 				//Find out and set the gender
 				if (male == false) {
 
-					kerbal.gender = ProtoCrewMember.Gender.Female;
+                    newKerbal.gender = ProtoCrewMember.Gender.Female;
 
 				}
 				if (male) {
 
-					kerbal.gender = ProtoCrewMember.Gender.Male;
+                    newKerbal.gender = ProtoCrewMember.Gender.Male;
 
 				}
 
@@ -292,7 +299,7 @@ namespace KustomKerbals
 
 		}
 
-		#region rendering
+		#region GUI
 
 		public void OnGUI()
 		{
@@ -370,6 +377,10 @@ namespace KustomKerbals
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("Name:");
 			stringToEdit = GUILayout.TextField(stringToEdit, 50);
+            /*if (GUILayout.Button("Random"))
+            {
+                getRandomKerbal = true;
+            }*/
 			GUILayout.EndHorizontal();
 
 			//Toggle female/male
@@ -411,8 +422,13 @@ namespace KustomKerbals
 			buttonState = GUILayout.Toggle(buttonState, "BadS: " + buttonState);
 			GUILayout.EndHorizontal();
 
-			//Toggles close on complete
-			GUILayout.BeginHorizontal();
+            //Toggles Veteran state.
+            GUILayout.BeginHorizontal();
+            veteran = GUILayout.Toggle(veteran, "Veteran: " + veteran);
+            GUILayout.EndHorizontal();
+
+            //Toggles close on complete
+            GUILayout.BeginHorizontal();
 			closeOnComplete = GUILayout.Toggle(closeOnComplete, "Close On Complete: " + closeOnComplete);
 			GUILayout.EndHorizontal();
 
@@ -553,6 +569,7 @@ namespace KustomKerbals
 
 					}
 					editTrait = kerb.trait;
+                    editVeteran = kerb.veteran;
 					if (editTrait == "Pilot") {
 						
 						editTraitInt = 0;
@@ -618,7 +635,11 @@ namespace KustomKerbals
 			editBadS = GUILayout.Toggle(editBadS, "BadS: " + editBadS);
 			GUILayout.EndHorizontal();
 
-			GUILayout.BeginHorizontal ();
+            GUILayout.BeginHorizontal();
+            editVeteran = GUILayout.Toggle(editVeteran, "Veteran: " + editVeteran);
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal ();
 			editFloat = GUILayout.Toggle (editFloat, "Float window");
 			GUILayout.EndHorizontal ();
 
@@ -641,8 +662,8 @@ namespace KustomKerbals
 					if (editExists) {
 
 						if (editOverride) {
-
-							kerbalToEdit.name = editName;
+                            
+                            kerbalToEdit.ChangeName(editName);
 							if (editGender == "Female") {
 
 								kerbalToEdit.gender = ProtoCrewMember.Gender.Female;
@@ -659,6 +680,7 @@ namespace KustomKerbals
 							kerbalToEdit.stupidity = editStupidity;
 
 							kerbalToEdit.isBadass = editBadS;
+                            kerbalToEdit.veteran = editVeteran;
 
 							ScreenMessages.PostScreenMessage (kerbalToEdit.name + " has been edited!", 1, ScreenMessageStyle.UPPER_CENTER);
 
@@ -670,7 +692,7 @@ namespace KustomKerbals
 
 					} else {
 						
-						kerbalToEdit.name = editName;
+                        kerbalToEdit.ChangeName(editName);
 						if (editGender == "Female") {
 					
 							kerbalToEdit.gender = ProtoCrewMember.Gender.Female;

@@ -1,0 +1,15 @@
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\bin\Debug\KustomKerbals.dll
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\bin\Debug\KustomKerbals.pdb
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\obj\Debug\KustomKerbals.csprojResolveAssemblyReference.cache
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\obj\Debug\KustomKerbals.dll
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\obj\Debug\KustomKerbals.pdb
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\bin\Debug\Assembly-CSharp-firstpass.dll
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\bin\Debug\Assembly-CSharp.dll
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\bin\Debug\KSPAssets.dll
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\bin\Debug\UnityEngine.dll
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\bin\Debug\UnityEngine.UI.dll
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\bin\Debug\TrackIRUnity.dll
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\bin\Debug\Mono.Cecil.dll
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\bin\Debug\TDx.TDxInput.dll
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\bin\Debug\Mono.Security.dll
+C:\Users\Clifton\Documents\Projects\KustomKerbals\KustomKerbals\bin\Debug\UnityEngine.xml
